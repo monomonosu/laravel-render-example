@@ -18,7 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/health', function () {
-    return 'HelloWorld!';
+    return 'HelloWorld!Web!';
 });
 
 Auth::routes();
