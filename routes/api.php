@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -90,64 +91,10 @@ Route::get('/tags', function () {
 });
 
 // （TOP）セッション一覧
-Route::get('/sessions', function () {
-    return response()->json([
-        [
-            'id' => 1,
-            'user_name' => null,
-            'title' => null,
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => null,
-            'content' => null,
-            'passion_level' => 1,
-        ],
-        [
-            'id' => 2,
-            'user_name' => "山田　太郎",
-            'title' => "もくもく会しましょう",
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => ["もくもく会"],
-            'content' => "ジャンルはなんでもOKです。もくもく会に参加できる方募集中",
-            'passion_level' => 2,
-        ],
-        [
-            'id' => 3,
-            'user_name' => "山田　花子",
-            'title' => "Typescript勉強会",
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => ["Typescript", "勉強会"],
-            'content' => "Typescriptについて勉強しましょう。",
-            'passion_level' => 3,
-        ],
-        [
-            'id' => 4,
-            'user_name' => "",
-            'title' => "",
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => [""],
-            'content' => "",
-            'passion_level' => 1,
-        ],
-        [
-            'id' => 5,
-            'user_name' => "栃木太郎",
-            'title' => "Next.jsについて学ぼう",
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => ["Next.js", "勉強会"],
-            'content' => "Next.js何もわからん人向け",
-            'passion_level' => 2,
-        ],
-        [
-            'id' => 6,
-            'user_name' => "名無し",
-            'title' => "Laravel初心者さんいらっしゃい",
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-            'tags' => ["Laravel", "初心者", "ハンズオン"],
-            'content' => "Laravel初心者さんいらっしゃい。ゆっくりしていってね",
-            'passion_level' => 3,
-        ],
-    ]);
-});
+Route::get('/sessions',[SessionController::class, 'index'])->name('index');
+
+// (セッション)セッション詳細
+Route::get('sessions/{id}',[SessionController::class, 'show'])->name('show');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
