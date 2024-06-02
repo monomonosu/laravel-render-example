@@ -91,10 +91,10 @@ Route::get('/tags', function () {
 });
 
 // （TOP）セッション一覧
-Route::get('/sessions',[SessionController::class, 'index'])->name('index');
+Route::get('/sessions', [SessionController::class, 'index'])->name('index');
 
 // (セッション)セッション詳細
-Route::get('sessions/{id}',[SessionController::class, 'show'])->name('show');
+Route::get('sessions/{id}', [SessionController::class, 'show'])->name('show');
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
