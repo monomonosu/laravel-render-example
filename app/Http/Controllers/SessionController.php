@@ -49,4 +49,25 @@ class SessionController extends Controller
             'created_at' => "2022-01-01T01:41:28.000000Z",
         ]);
     }
+
+    /**
+     * Store a newly created session in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        $session = new Session();
+        $session->user_name = $request->input('user_name');
+        $session->title = $request->input('title');
+        $session->platform = $request->input('platform');
+        $session->url = $request->input('url');
+        $session->password = $request->input('password');
+        $session->passion_level = $request->input('passion_level');
+        $session->content = $request->input('content');
+        $session->save();
+
+        return response()->json($session);
+    }
 }
