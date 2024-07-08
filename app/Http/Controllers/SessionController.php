@@ -29,7 +29,6 @@ class SessionController extends Controller
     }
 
     /**
-     * TODO:ダミーデータなので実データを返す様に修正する
      * Display the specified session.
      *
      * @param  int  $id
@@ -37,17 +36,9 @@ class SessionController extends Controller
      */
     public function show($id)
     {
-        return response()->json([
-            'id' => $id,
-            'title' => "Next.jsについて学ぼう" . $id,
-            'user_name' => "栃木太郎" . $id,
-            'tags' => ["Next.js", "勉強会"],
-            'platform' => 'GoogleMeet',
-            'url' => 'https://meet.google.com/xxx-xxx-xxx',
-            'passion_level' => 2,
-            'content' => "Next.js何もわからん人向け" . $id,
-            'created_at' => "2022-01-01T01:41:28.000000Z",
-        ]);
+        $session = Session::find($id);
+
+        return response()->json($session);
     }
 
     /**
