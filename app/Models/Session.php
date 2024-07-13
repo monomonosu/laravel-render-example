@@ -20,4 +20,9 @@ class Session extends Model
         'passion_level',
         'content',
     ];
+
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'session_tags', 'session_id', 'tag_id');
+    }
 }
