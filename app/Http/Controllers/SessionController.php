@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Session;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class SessionController extends Controller
 {
@@ -17,7 +18,7 @@ class SessionController extends Controller
         $PER_PAGE = 30;
         $page = $request->input('page', 1);
 
-        $sessions = Session::orderBy('created_at', 'desc')->paginate($PER_PAGE, ['*'], 'page', $page);
+        $sessions = Session::with('tags:id,name')->orderBy('created_at', 'desc')->paginate($PER_PAGE, ['*'], 'page', $page);
 
         return response()->json([
             'items' => $sessions->items(),
@@ -26,6 +27,7 @@ class SessionController extends Controller
             'current_page' => $sessions->currentPage(),
             'last_page' => $sessions->lastPage(),
         ]);
+
     }
 
     /**
@@ -36,7 +38,7 @@ class SessionController extends Controller
      */
     public function show($id)
     {
-        $session = Session::find($id);
+        $session = Session::with('tags:id,name')->find($id);
 
         return response()->json($session);
     }
