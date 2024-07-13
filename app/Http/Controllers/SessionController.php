@@ -27,7 +27,6 @@ class SessionController extends Controller
             'current_page' => $sessions->currentPage(),
             'last_page' => $sessions->lastPage(),
         ]);
-
     }
 
     /**
