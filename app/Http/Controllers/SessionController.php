@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Session;
+use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class SessionController extends Controller
 {
@@ -44,6 +44,8 @@ class SessionController extends Controller
 
     /**
      * Store a newly created session in storage.
+     * リレーション先のタグも登録する。もしもタグが存在しない場合は新規登録する。tagsは[{id:'1',name: 'tag1'}, {id:null,name: 'tag2'}]の形式で受け取る
+     * タグのidがnullの場合はタグを新規登録してセッションに紐付け、タグのidが存在する場合はそのidをセッションに紐付ける
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -51,14 +53,22 @@ class SessionController extends Controller
     public function register(Request $request)
     {
         $session = new Session();
-        $session->user_name = $request->input('user_name');
-        $session->title = $request->input('title');
-        $session->platform = $request->input('platform');
-        $session->url = $request->input('url');
-        $session->password = $request->input('password');
-        $session->passion_level = $request->input('passion_level');
-        $session->content = $request->input('content');
+        $session->fill($request->all());
         $session->save();
+
+        $tags = $request->input('tags', []);
+        $tagIds = [];
+        foreach ($tags as $tag) {
+            if (empty($tag['id'])) {
+                $newTag = new Tag();
+                $newTag->name = $tag['name'];
+                $newTag->save();
+                $tagIds[] = $newTag->id;
+            } else {
+                $tagIds[] = $tag['id'];
+            }
+        }
+        $session->tags()->attach($tagIds);
 
         return response()->json($session);
     }
