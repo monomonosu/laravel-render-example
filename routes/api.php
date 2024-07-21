@@ -32,6 +32,9 @@ Route::get('sessions/{id}', [SessionController::class, 'show'])->name('show');
 // (セッション)セッション登録
 Route::post('sessions/register', [SessionController::class, 'register'])->name('register');
 
+// (セッション)セッション更新
+Route::put('sessions/{id}', [SessionController::class, 'update'])->name('update');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

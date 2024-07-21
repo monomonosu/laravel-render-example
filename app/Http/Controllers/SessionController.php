@@ -38,6 +38,10 @@ class SessionController extends Controller
     public function show($id)
     {
         $session = Session::with('tags:id,name')->find($id);
+        if (empty($session)) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+        $session->makeHidden('password');
 
         return response()->json($session);
     }
@@ -69,6 +73,45 @@ class SessionController extends Controller
             }
         }
         $session->tags()->attach($tagIds);
+
+        return response()->json($session);
+    }
+
+    /**
+     * Update the specified session in storage.
+     * 入力されたパスワードが保存されているパスワードと一致する場合のみ更新を許可する
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $session = Session::find($id);
+        if (empty($session)) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        if ($session->password !== $request->input('password')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $session->fill($request->all());
+        $session->save();
+
+        $tags = $request->input('tags', []);
+        $tagIds = [];
+        foreach ($tags as $tag) {
+            if (empty($tag['id'])) {
+                $newTag = new Tag();
+                $newTag->name = $tag['name'];
+                $newTag->save();
+                $tagIds[] = $newTag->id;
+            } else {
+                $tagIds[] = $tag['id'];
+            }
+        }
+        $session->tags()->sync($tagIds);
 
         return response()->json($session);
     }
