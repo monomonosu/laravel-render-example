@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Session;
 use App\Models\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class SessionController extends Controller
 {
@@ -132,7 +131,6 @@ class SessionController extends Controller
             return response()->json(['message' => 'Not Found'], 404);
         }
 
-        Log::info($request->input('url'));
         if ($session->password !== $request->input('password')) {
             return response()->json(['message' => 'Unauthorized'], 401);
         }
