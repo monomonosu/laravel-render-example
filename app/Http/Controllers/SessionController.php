@@ -115,4 +115,28 @@ class SessionController extends Controller
 
         return response()->json($session);
     }
+
+    /**
+     * Remove the specified session from storage.
+     * 入力されたパスワードが保存されているパスワードと一致する場合のみ削除を許可する
+     *
+     * @param  int  $id
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request,$id)
+    {
+        $session = Session::find($id);
+        if (empty($session)) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        if ($session->password !== $request->input('password')) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $session->delete();
+
+        return response()->json(['message' => 'Deleted']);
+    }
 }
