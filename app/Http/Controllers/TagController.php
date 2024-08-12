@@ -14,10 +14,10 @@ class TagController extends Controller
      */
     public function index(Request $request)
     {
-        $count = $request->input('count', 'all');
+        $count = $request->input('count');
 
         // countが指定されていない場合は全権件取得
-        if ($count === 'all') {
+        if (empty($count)) {
             $tags = Tag::select('id', 'name')->orderBy('updated_at', 'desc')->get();
             return response()->json($tags);
         }
