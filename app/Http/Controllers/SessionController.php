@@ -74,7 +74,7 @@ class SessionController extends Controller
         }
         $session->tags()->attach($tagIds);
 
-        return response()->json($session);
+        return response()->json(['message' => 'セッションを登録しました'], 200);
     }
 
     /**
@@ -113,7 +113,8 @@ class SessionController extends Controller
         }
         $session->tags()->sync($tagIds);
 
-        return response()->json($session);
+        return response()->json(['message' => 'セッションを更新しました'], 200);
+
     }
 
     /**
@@ -124,7 +125,7 @@ class SessionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request,$id)
+    public function destroy(Request $request, $id)
     {
         $session = Session::find($id);
         if (empty($session)) {
@@ -137,6 +138,6 @@ class SessionController extends Controller
 
         $session->delete();
 
-        return response()->json(['message' => 'Deleted']);
+        return response()->json(['message' => 'セッションを削除しました'], 200);
     }
 }
